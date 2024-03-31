@@ -73,11 +73,11 @@ def generate(map):
         k = "up"
 
     if wall == 2:
-        end_x, end_y = randint(4, x - 1), y
+        end_x, end_y = randint(x / 2, x - 1), y
         k = "down"
 
     if wall == 3:
-        end_x, end_y = 1, randint(2, y - 4)
+        end_x, end_y = 1, randint(2, y / 2)
         k = "left"
 
     if wall == 4:
