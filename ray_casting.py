@@ -1,19 +1,25 @@
 import pygame
+from numba import njit
+
 from setting import *
 from map import world_map
 
+@njit(fastmath=True)
 def mapping(x, y):
 	return (x // TILE) * TILE, (y // TILE) * TILE
 
-def ray_casting(screen, player_pos, player_angle, textures):#, num_thread):
-	global depth_v, depth_h, yv, xh, texture_v, texture_h
+@njit(fastmath=True)
+def ray_casting(player_pos, player_angle, world_map):
+	walls = []
+	texture_v, texture_h = 0, 0
 	xo, yo = player_pos
 	xm, ym = mapping(xo, yo)
-	cur_angle = player_angle - HALF_FOV#player_angle - (HALF_FOV - ((NUM_RAYS // THREADS) * num_thread * DELTA_ANGLE))
+	cur_angle = player_angle - HALF_FOV
 
-	for ray in range(NUM_RAYS):# // THREADS):
+	for ray in range(NUM_RAYS):
 		sin_a = math.sin(cur_angle)
 		cos_a = math.cos(cur_angle)
+		sin_a = sin_a if sin_a else 0.000001
 
 		# verticals
 		if cos_a >= 0:
@@ -61,15 +67,18 @@ def ray_casting(screen, player_pos, player_angle, textures):#, num_thread):
 		depth *= math.cos(player_angle - cur_angle)
 
 		depth = max(depth, 0.00001)
-		proj_height = min(int(PROJ_COEFF / depth), HEIGHT * 5)
+		proj_height = min(int(PROJ_COEFF / depth), HEIGHT * 7)
 
-		wall_column = textures[texture].subsurface(offset * TEXTURE_SCALE, 0, TEXTURE_SCALE, TEXTURE_HEIGHT)
-		wall_column = pygame.transform.scale(wall_column, (SCALE, proj_height))
-
-		screen.blit(wall_column, (ray * SCALE, HALF_HEIGHT - proj_height // 2))
-
-		# c = 255 / (1 + depth * depth * 0.00002)
-		# color = (c, c, c)
-		# pygame.draw.rect(screen, color, ((((NUM_RAYS // THREADS) * num_thread) + ray) * SCALE, HALF_HEIGHT - proj_height // 2, SCALE, proj_height))
+		walls.append((depth, offset, texture, proj_height))
 
 		cur_angle += DELTA_ANGLE
+	return walls
+
+def drawing_walls(screen, player, textures):
+	walls = ray_casting(player.pos, player.angle, world_map)
+	for ray, values in enumerate(walls):
+		depth, offset, texture, proj_height = values
+		wall_column = textures[texture].subsurface(offset * TEXTURE_SCALE, 0, TEXTURE_SCALE, TEXTURE_HEIGHT)
+		wall_column = pygame.transform.scale(wall_column, (SCALE, proj_height))
+		wall_pos = (ray * SCALE, HALF_HEIGHT - proj_height // 2)
+		screen.blit(wall_column, (ray * SCALE, HALF_HEIGHT - proj_height // 2))

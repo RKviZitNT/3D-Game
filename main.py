@@ -1,4 +1,5 @@
 import pygame
+
 from setting import *
 from player import Player
 from drawing import Drawing
@@ -18,11 +19,11 @@ while True:
 			if event.key == pygame.K_ESCAPE:
 				exit()
 
-	player.movement()
+	player.move()
 	screen.fill(BLACK)
 
 	drawing.background()
-	drawing.world(player.pos, player.angle)
+	drawing.world(player)
 	drawing.fps(clock)
 
 	pygame.display.flip()

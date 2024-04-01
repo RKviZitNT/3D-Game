@@ -5,10 +5,10 @@ WIDTH = 1280
 HEIGHT = 720
 HALF_WIDTH = WIDTH // 2
 HALF_HEIGHT = HEIGHT // 2
-FPS = 60 // 2
+FPS = 60 * 1
 TILE = 100
 FPS_POS = WIDTH - 70, 10
-THREADS = 12
+THREADS = 2
 
 # texture settings
 TEXTURE_WIDTH = 800
@@ -28,7 +28,7 @@ EXIT_SYMBOL = "x"
 # ray casting setting
 FOV = math.pi / 3
 HALF_FOV = FOV / 2
-NUM_RAYS = WIDTH // 2
+NUM_RAYS = WIDTH // 1
 MAX_DEPTH = max(MAP_WIDTH, MAP_HEIGHT)
 DELTA_ANGLE = FOV / NUM_RAYS
 DIST = NUM_RAYS / (2 * math.tan(HALF_FOV))
@@ -39,7 +39,8 @@ SCALE = WIDTH // NUM_RAYS
 player_pos = (1.5 * TILE, MAP_HEIGHT * TILE - 1.5 * TILE)
 player_angle = -50
 player_speed = 2.5 * (60 / FPS)
-turn_speed = 0.02 * (60 / FPS)
+player_sens = 0.0005
+player_side = 50
 
 # colors
 WHITE = (255, 255, 255)
