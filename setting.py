@@ -5,7 +5,7 @@ WIDTH = 1280
 HEIGHT = 720
 HALF_WIDTH = WIDTH // 2
 HALF_HEIGHT = HEIGHT // 2
-FPS = 60 * 1
+FPS = 60 * 2
 TILE = 100
 FPS_POS = WIDTH - 70, 10
 THREADS = 2
@@ -16,29 +16,27 @@ TEXTURE_HEIGHT = 800
 TEXTURE_SCALE = TEXTURE_WIDTH // TILE
 
 # map settings
-MAP_WIDTH = 12
-MAP_HEIGHT = 8
-koef1 = 1.7
-koef2 = 2.2
-koef3 = 1.2
+MAP_WIDTH = 10
+MAP_HEIGHT = 10
 WALL_SYMBOL = "1"
-NONE_SYMBOL = "."
+NONE_SYMBOL = " "
 EXIT_SYMBOL = "x"
 
 # ray casting setting
 FOV = math.pi / 3
 HALF_FOV = FOV / 2
 NUM_RAYS = WIDTH // 1
-MAX_DEPTH = max(MAP_WIDTH, MAP_HEIGHT)
+MAX_DEPTH = 50
 DELTA_ANGLE = FOV / NUM_RAYS
 DIST = NUM_RAYS / (2 * math.tan(HALF_FOV))
 PROJ_COEFF = (1 * (WIDTH / NUM_RAYS)) * DIST * TILE
 SCALE = WIDTH // NUM_RAYS
 
 # player settings
-player_pos = (1.5 * TILE, MAP_HEIGHT * TILE - 1.5 * TILE)
+player_pos = (1.5 * TILE, 1.5 * TILE)
 player_angle = -50
 player_speed = 2.5 * (60 / FPS)
+player_acceleration = 1.5 * (60 / FPS)
 player_sens = 0.0005
 player_side = 50
 
