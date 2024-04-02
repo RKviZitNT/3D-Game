@@ -67,9 +67,12 @@ def ray_casting(player_pos, player_angle, world_map):
 		depth *= math.cos(player_angle - cur_angle)
 
 		depth = max(depth, 0.00001)
-		proj_height = min(int(PROJ_COEFF / depth), HEIGHT * 7)
+		proj_height = min(int(PROJ_COEFF / depth), HEIGHT * 20)
+		coeff = proj_height / HEIGHT
+		if coeff < 1:
+			coeff = 1
 
-		walls.append((depth, offset, texture, proj_height))
+		walls.append((depth, offset, texture, proj_height, coeff))
 
 		cur_angle += DELTA_ANGLE
 	return walls
@@ -77,8 +80,8 @@ def ray_casting(player_pos, player_angle, world_map):
 def drawing_walls(screen, player, textures):
 	walls = ray_casting(player.pos, player.angle, world_map)
 	for ray, values in enumerate(walls):
-		depth, offset, texture, proj_height = values
-		wall_column = textures[texture].subsurface(offset * TEXTURE_SCALE, 0, TEXTURE_SCALE, TEXTURE_HEIGHT)
-		wall_column = pygame.transform.scale(wall_column, (SCALE, proj_height))
-		wall_pos = (ray * SCALE, HALF_HEIGHT - proj_height // 2)
-		screen.blit(wall_column, (ray * SCALE, HALF_HEIGHT - proj_height // 2))
+		depth, offset, texture, proj_height, coeff = values
+		wall_column = textures[texture].subsurface(offset * TEXTURE_SCALE, (TEXTURE_HEIGHT // 2) - ((TEXTURE_HEIGHT // coeff) // 2), TEXTURE_SCALE, TEXTURE_HEIGHT // coeff)
+		wall_column = pygame.transform.scale(wall_column, (SCALE, min(proj_height, HEIGHT)))
+		wall_pos = (ray * SCALE, HALF_HEIGHT - min(proj_height, HEIGHT) // 2)
+		screen.blit(wall_column, (ray * SCALE, HALF_HEIGHT - min(proj_height, HEIGHT) // 2))

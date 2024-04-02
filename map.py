@@ -1,7 +1,7 @@
 import pygame
 from numba.core import types
 from numba.typed import Dict
-from numba import int32, float64
+from numba import int64, float64
 
 from setting import *
 from maze_gen import text_map
@@ -18,7 +18,7 @@ from maze_gen import text_map
 # ]
 
 wall_hitboxes = []
-world_map = Dict.empty(key_type=types.UniTuple(float64, 2), value_type=int32)
+world_map = Dict.empty(key_type=types.UniTuple(float64, 2), value_type=int64)
 for j, row in enumerate(text_map):
 	for i, char in enumerate(row):
 		if char != NONE_SYMBOL:
