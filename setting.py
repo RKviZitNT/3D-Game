@@ -32,7 +32,7 @@ PROJ_COEFF = (1 * (WIDTH / NUM_RAYS)) * DIST * TILE
 SCALE = WIDTH // NUM_RAYS
 
 # player settings
-player_pos = (1.5 * TILE, 1.5 * TILE)
+player_pos = ((0.5 * TILE) + ((MAP_WIDTH // 2) * TILE), (0.5 * TILE) + ((MAP_HEIGHT // 2) * TILE))
 player_angle = -50
 player_speed = 2.5 * (60 / FPS)
 player_acceleration = 1.5

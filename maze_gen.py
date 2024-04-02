@@ -5,18 +5,12 @@ from setting import *
 sides = {'up': (0, -1), 'right': (1, 0), 'down': (0, 1), 'left': (-1, 0)}
 reside = {'up': 'down', 'right': 'left', 'down': 'up', 'left': 'right'}
 
-text_map = [[WALL_SYMBOL for i in range(MAP_WIDTH)] for j in range(MAP_HEIGHT)]
-
-min_entry = MAP_WIDTH * MAP_HEIGHT * 2
-
-start_x, start_y = 1, 1
-path_history = [(start_x, start_y)]
-text_map[start_y][start_x] = NONE_SYMBOL
+text_map = [[WALL_SYMBOL for _ in range(MAP_WIDTH)] for _ in range(MAP_HEIGHT)]
 
 def print_map():
     for j in range(MAP_HEIGHT):
         for i in range(MAP_WIDTH):
-            print(text_map[j][i], end='')
+            print(text_map[j][i], end=' ')
         print('\n', end='')
 
 def is_wall(x ,y):
@@ -40,14 +34,12 @@ def is_pass(x, y, key):
                 return False
     return True
 
-def generate_path():
-    path_end = False
-    step = 0
+def generate_path(start_x, start_y):
+    path_history = [(start_x, start_y)]
 
-    x, y = path_history[step]
-
-    #while not path_end:
-    while not path_end:
+    while path_history:
+        x, y = path_history[-1]
+        text_map[y][x] = NONE_SYMBOL
         sidesch = ['up', 'right', 'down', 'left']
         next_step = False
 
@@ -77,18 +69,35 @@ def generate_path():
                     break
 
         if not next_step:
-            step -= 1
-            if step < 0:
-                path_end = True
-            x, y = path_history[step]
             path_history.pop()
         else:
             text_map[y][x] = NONE_SYMBOL
             path_history.append((x, y))
-            step += 1
+
+    for i in range(-1, 2):
+        for j in range(-1, 2):
+            text_map[start_y+i][start_x+j] = NONE_SYMBOL
+
+    exit_spawn = random.choice(['up', 'down'])
+    if exit_spawn == 'up':
+        walls = [i for i in range(1, MAP_WIDTH-2)]
+        wall = random.choice(walls)
+        walls.remove(wall)
+        for _ in range(len(walls)):
+            if text_map[1][wall] == NONE_SYMBOL:
+                text_map[0][wall] = EXIT_SYMBOL
+                break
+    if exit_spawn == 'down':
+        walls = [i for i in range(1, MAP_WIDTH-2)]
+        wall = random.choice(walls)
+        walls.remove(wall)
+        for _ in range(len(walls)):
+            if text_map[MAP_HEIGHT-2][wall] == NONE_SYMBOL:
+                text_map[MAP_HEIGHT-1][wall] = EXIT_SYMBOL
+                break
 
 def generate():
-    generate_path()
+    generate_path(MAP_WIDTH//2, MAP_HEIGHT//2)
     print_map()
 
 generate()
