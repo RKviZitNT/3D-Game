@@ -1,15 +1,16 @@
 import random
+from numba import prange
 
 from setting import *
 
 sides = {'up': (0, -1), 'right': (1, 0), 'down': (0, 1), 'left': (-1, 0)}
 reside = {'up': 'down', 'right': 'left', 'down': 'up', 'left': 'right'}
 
-text_map = [[WALL_SYMBOL for _ in range(MAP_WIDTH)] for _ in range(MAP_HEIGHT)]
+text_map = [[WALL_SYMBOL for _ in prange(MAP_WIDTH)] for _ in prange(MAP_HEIGHT)]
 
 def print_text_map():
-    for j in range(MAP_HEIGHT):
-        for i in range(MAP_WIDTH):
+    for j in prange(MAP_HEIGHT):
+        for i in prange(MAP_WIDTH):
             print(text_map[j][i], end=' ')
         print('\n', end='')
 
@@ -58,10 +59,10 @@ def biom_generate():
         
         br = False
         
-        for i in range(len(text_map)):
+        for i in prange(len(text_map)):
             if br:
                 break
-            for i2 in range(len(text_map[i])):
+            for i2 in prange(len(text_map[i])):
                 if text_map[i][i2] == EXIT_SYMBOL and exi == False:
                     exi = True
                     stop = False
@@ -78,8 +79,8 @@ def biom_generate():
                 else:
                     stop = True
                 
-        for i in range(now_y,now_y+ry+1):
-            for i2 in range(now_x,now_x+rx+1):
+        for i in prange(now_y,now_y+ry+1):
+            for i2 in prange(now_x,now_x+rx+1):
                 if i <= y-1 and i2 <= x-1:
                     if text_map[i][i2] == WALL_SYMBOL:
                         text_map[i][i2] = rbiom
@@ -106,7 +107,7 @@ def generate_path(start_x, start_y):
         sidesch = ['up', 'right', 'down', 'left']
         next_step = False
 
-        for _ in range(4):
+        for _ in prange(4):
             side = random.choice(sidesch)
             sidesch.remove(side)
 
@@ -137,24 +138,24 @@ def generate_path(start_x, start_y):
             text_map[y][x] = NONE_SYMBOL
             path_history.append((x, y))
 
-    for i in range(-1, 2):
-        for j in range(-1, 2):
+    for i in prange(-1, 2):
+        for j in prange(-1, 2):
             text_map[start_y+i][start_x+j] = NONE_SYMBOL
 
     exit_spawn = random.choice(['up', 'down'])
     if exit_spawn == 'up':
-        walls = [i for i in range(1, MAP_WIDTH-2)]
+        walls = [i for i in prange(1, MAP_WIDTH-2)]
         wall = random.choice(walls)
         walls.remove(wall)
-        for _ in range(len(walls)):
+        for _ in prange(len(walls)):
             if text_map[1][wall] == NONE_SYMBOL:
                 text_map[0][wall] = EXIT_SYMBOL
                 break
     if exit_spawn == 'down':
-        walls = [i for i in range(1, MAP_WIDTH-2)]
+        walls = [i for i in prange(1, MAP_WIDTH-2)]
         wall = random.choice(walls)
         walls.remove(wall)
-        for _ in range(len(walls)):
+        for _ in prange(len(walls)):
             if text_map[MAP_HEIGHT-2][wall] == NONE_SYMBOL:
                 text_map[MAP_HEIGHT-1][wall] = EXIT_SYMBOL
                 break

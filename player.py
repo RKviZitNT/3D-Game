@@ -65,7 +65,7 @@ class Player:
 		cos_a = math.cos(self.angle)
 
 		keys = pygame.key.get_pressed()
-		if keys[pygame.K_SPACE]: self.acc = player_acceleration
+		if keys[pygame.K_LSHIFT]: self.acc = player_acceleration
 		else: self.acc = 1
 		if keys[pygame.K_w]:
 			dx = self.speed * self.acc * cos_a

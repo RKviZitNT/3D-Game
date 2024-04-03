@@ -1,5 +1,5 @@
 import pygame
-from numba import njit
+from numba import njit, prange
 
 from setting import *
 from map import world_map
@@ -16,7 +16,7 @@ def ray_casting(player_pos, player_angle, world_map):
 	xm, ym = mapping(xo, yo)
 	cur_angle = player_angle - HALF_FOV
 
-	for ray in range(NUM_RAYS):
+	for ray in prange(NUM_RAYS):
 		sin_a = math.sin(cur_angle)
 		cos_a = math.cos(cur_angle)
 		sin_a = sin_a if sin_a else 0.000001
@@ -28,7 +28,7 @@ def ray_casting(player_pos, player_angle, world_map):
 		else:
 			x = xm
 			dx = -1
-		for	i in range(0, MAX_DEPTH):
+		for	i in prange(0, MAX_DEPTH):
 			depth_v = (x - xo) / cos_a
 			yv = yo + depth_v * sin_a
 			tile_v = mapping(x + dx, yv)
@@ -44,7 +44,7 @@ def ray_casting(player_pos, player_angle, world_map):
 		else:
 			y = ym
 			dy = -1
-		for	i in range(0, MAX_DEPTH):
+		for	i in prange(0, MAX_DEPTH):
 			depth_h = (y - yo) / sin_a
 			xh = xo + depth_h * cos_a
 			tile_h = mapping(xh, y + dy)
