@@ -27,3 +27,5 @@ for j, row in enumerate(text_map):
 				world_map[(i * TILE, j * TILE)] = 0
 			if char == '1':
 				world_map[(i * TILE, j * TILE)] = 1
+			if char == 'X':
+				world_map[(i * TILE, j * TILE)] = 10

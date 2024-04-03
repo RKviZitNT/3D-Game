@@ -19,8 +19,8 @@ BIOMS = ["0", "1"]
 MIN_BIOM_SIZE = 4 
 
 # map settings
-MAP_WIDTH = 30
-MAP_HEIGHT = 30
+MAP_WIDTH = 10
+MAP_HEIGHT = 10
 WALL_SYMBOL = "#"
 NONE_SYMBOL = " "
 EXIT_SYMBOL = "X"

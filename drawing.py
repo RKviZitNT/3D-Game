@@ -9,6 +9,7 @@ class Drawing:
 		self.font = pygame.font.SysFont('Arial', 36, bold=True)
 		self.textures = {0: pygame.image.load("texture/wall0.jpg").convert(),
 						 1: pygame.image.load("texture/wall1.jpg").convert(),
+						 10: pygame.image.load("texture/door.jpg").convert(),
 						 }
 
 	def background(self):
