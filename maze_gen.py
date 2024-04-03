@@ -7,7 +7,7 @@ reside = {'up': 'down', 'right': 'left', 'down': 'up', 'left': 'right'}
 
 text_map = [[WALL_SYMBOL for _ in range(MAP_WIDTH)] for _ in range(MAP_HEIGHT)]
 
-def print_map():
+def print_text_map():
     for j in range(MAP_HEIGHT):
         for i in range(MAP_WIDTH):
             print(text_map[j][i], end=' ')
@@ -33,6 +33,69 @@ def is_pass(x, y, key):
             if is_space(x+dx, y+dy):
                 return False
     return True
+
+def biom_generate():
+    exit_biom = 0   
+        
+    x = len(text_map[0])
+    y = len(text_map)
+    
+    now_x= 0
+    now_y = 0
+    
+    done = False
+    exi = False
+    
+    while not done:
+        rx = 0
+        ry = 0
+        while rx * ry <= MIN_BIOM_SIZE:
+            rx = random.randint(0, x//3)
+            ry = random.randint(0, x//3)
+        
+        
+        rbiom = random.choice(BIOMS)
+        
+        br = False
+        
+        for i in range(len(text_map)):
+            if br:
+                break
+            for i2 in range(len(text_map[i])):
+                if text_map[i][i2] == EXIT_SYMBOL and exi == False:
+                    exi = True
+                    stop = False
+                    now_x = i2
+                    now_y = i
+                    br = True
+                    break
+                elif text_map[i][i2] == WALL_SYMBOL:
+                    stop = False
+                    now_x = i2
+                    now_y = i
+                    br = True
+                    break
+                else:
+                    stop = True
+                
+        for i in range(now_y,now_y+ry+1):
+            for i2 in range(now_x,now_x+rx+1):
+                if i <= y-1 and i2 <= x-1:
+                    if text_map[i][i2] == WALL_SYMBOL:
+                        text_map[i][i2] = rbiom
+                            
+                    if text_map[i][i2] == EXIT_SYMBOL:
+                        exit_biom= rbiom
+                        exi = True
+            
+        end_x = now_x+rx
+        end_y = now_y+ry
+        
+        
+        if stop == True:
+            done = True
+    
+    return text_map
 
 def generate_path(start_x, start_y):
     path_history = [(start_x, start_y)]
@@ -98,6 +161,7 @@ def generate_path(start_x, start_y):
 
 def generate():
     generate_path(MAP_WIDTH//2, MAP_HEIGHT//2)
-    print_map()
+    biom_generate()
+    print_text_map()
 
 generate()
